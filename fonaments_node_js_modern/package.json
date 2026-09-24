@@ -1,0 +1,9 @@
+{
+  "name": "fonaments-node-js-modern",
+  "version": "1.0.0",
+  "description": "Activitat 2 · JavaScript modern: inventari i préstecs de material de l'aula",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test"
+  }
+}
