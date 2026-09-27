@@ -2,9 +2,9 @@ const fs = require("fs");
 
 const dades = JSON.parse(fs.readFileSync(__dirname + "/data/material.json", "utf8"));
 let total = 0;
-for (let i = 0; i < dades.length; i++) {
-  total = total + dades[i].valor;
-}
+dades.forEach(dada => {
+  total += dada.valor;
+});
 
 const disponibles = dades
   .filter((dada) => dada.estat == "disponible")
