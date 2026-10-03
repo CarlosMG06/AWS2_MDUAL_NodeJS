@@ -34,8 +34,8 @@ function crear(nom, tipus, aula, valorStr) {
     if (!nom || !tipus || !aula || !valorStr) {
       throw new Error("Falta alguna dada: nom, tipus, aula, valor")
     }
-    if (!arrTipus.includes(tipus)) {
-        throw new Error(`Tipus no vàlid: ${tipus} - Vàlids: ${arrTipus.join(", ")}`);
+    if (!TIPUS.includes(tipus)) {
+        throw new Error(`Tipus no vàlid: ${tipus} - Vàlids: ${TIPUS.join(", ")}`);
     }
     if (!parseInt(valorStr) || valorStr < 0) {
         throw new Error(`Valor no vàlid: ${valorStr}`);
@@ -52,6 +52,7 @@ function crear(nom, tipus, aula, valorStr) {
 function prestar(arr, iniciId, persona) {
     const elemId = cercar(arr, iniciId);
     if (!elemId) throw new Error(`No s'ha trobat cap element amb id que comenci amb ${iniciId}`);
+    if (!persona) throw new Error(`Falta la persona a qui es presta`);
     if (elemId.estat !== "disponible") {
         const estat = `${elemId.estat} ${elemId.prestatA ? `a ${elemId.prestatA}` : ""}`;
         throw new Error(`No es pot prestar: està ${estat}`);
@@ -66,7 +67,7 @@ function prestar(arr, iniciId, persona) {
 function retornar(arr, iniciId) {
     const elemId = cercar(arr, iniciId);
     if (!elemId) throw new Error(`No s'ha trobat cap element amb id que comenci amb ${iniciId}`);
-    if (elemId.estat !== "disponible") {
+    if (elemId.estat !== "prestat") {
       throw new Error(`No es pot prestar: està ${elemId.estat}`);
     }
     const {prestatA, dataPrestec, ...resta} = elemId;
@@ -87,12 +88,16 @@ function estadistiques(arr) {
         return sumes;
     }, {});
     const perAulaObjects = Object.groupBy(arr, elem => elem.aula);
-    const perAula = Object.keys(perAulaObjects).map(aula => [aula, perAulaObjects[aula].length])
+    const perAula = Object.keys(perAulaObjects).map(aula => [aula, perAulaObjects[aula].length]);
+    const materialAvariat = arr.some(elem => elem.estat === "avariat");
+    const totTeAula =  arr.every(elem => elem.aula);
     return {
         elements: arr.length,
         vTotal, 
         perTipus, perAula,
         vMitja, vMax,
+        materialAvariat,
+        totTeAula,
     };
 }
 
