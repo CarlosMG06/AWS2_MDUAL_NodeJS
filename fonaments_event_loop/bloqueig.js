@@ -1,26 +1,20 @@
 const { performance } = require("node:perf_hooks");
- 
-function ocupa(ms) {
-  const fi = performance.now() + ms;
-  while (performance.now() < fi) {}
-}
+const { ocupa } = require("./mesura.js");
 
 let ticks = 0;
-let ms = null;
-const diffs = [];
-
-const inici = Math.round(performance.now());
+let maxSalt = 0;
+let anterior = Math.round(performance.now());
 
 const id = setInterval(() => {
-    const msPrev = ms ?? inici;
-    ms = Math.round(performance.now());
-    diffs.push(ms - msPrev);
+    const ara = Math.round(performance.now());
+    const salt = ara - anterior;
+    anterior = ara;
     ticks++;
-    console.log(`tic ${ticks} · ${ms} ms`);
+    maxSalt = Math.max(salt, maxSalt);
+    console.log(`tic ${ticks} · ${ara} ms`);
     if (ticks >= 8) {
         clearInterval(id);
-        const diffMax = Math.max(...diffs);
-        console.log(`Salt més gran entre tics: ${diffMax} ms`)
+        console.log(`Salt més gran entre tics: ${maxSalt} ms`)
     }
 }, 200);
 
