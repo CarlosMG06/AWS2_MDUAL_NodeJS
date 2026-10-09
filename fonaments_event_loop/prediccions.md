@@ -58,3 +58,40 @@ Promise.resolve().then(() => setTimeout(() => console.log("5"), 0));
 2. Timeouts en ordre - nextTick es mira després de cada Timeout
 
 *Incorrecte* - mostra "**1 2 3 4 5**", Promise afegeix el seu Timeout a la cua de temporitzadors després que ja s'hagin afegit la resta durant la passada síncrona
+
+## Pas 2
+
+Codi **fases.js**
+```js
+const fs = require("node:fs");
+
+setTimeout(() => console.log("principal · timeout"), 0);
+setImmediate(() => console.log("principal · immediate"));
+
+fs.readFile(__filename, (err, data) => {
+    setTimeout(() => console.log("E/S · timeout"), 0);
+    setImmediate(() => console.log("E/S · immediate"));
+});
+```
+
+Resultat esperat
+```
+$ node fases.js
+principal · immediate
+principal · timeout
+E/S · immediate
+E/S · timeout
+$ node fases.js
+principal · timeout
+principal · immediate
+E/S · immediate
+E/S · timeout
+```
+
+**Explicació:**
+
+Des del mòdul principal, varia quin surt primer perquè si el bucle:
+- arriba a la fase timers **abans** que venci 1 ms: el timeout no acaba, immediate surt primer
+- arriba a la fase timers **després** que venci 1 ms: acaba el timeout, immediate surt segon
+
+Des d'un callback d'E/S, el bucle sempre està a la fase poll, i la següent sempre és check. Per tant, immediate sempre surt primer.
