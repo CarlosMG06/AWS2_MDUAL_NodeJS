@@ -98,8 +98,8 @@ Des d'un callback d'E/S, el bucle sempre està a la fase poll, i la següent sem
 
 ## Pas 3
 
- Codi **casC.js**
- ```js
+Codi **casC.js**
+```js
 setTimeout(() => console.log("1"), 10);
 setTimeout(() => console.log("2"), 0);
 const inici = Date.now();
@@ -128,3 +128,77 @@ Salt més gran entre tics: 2100 ms
 ```
 
 - S'han perdut 20 tics. El tic 5 només surt una sola vegada perquè el bucle ```while``` de la funció ```ocupa(ms)``` fa que s'esperi l'interval.
+
+## Pas 5
+
+Resultat **pool.js**
+```
+$ node pool.js
+Fils del pool: 4 (per defecte)
+Totes les tasques enviades: el fil principal ja està lliure
+Tasca 1 · 127 ms
+Tasca 3 · 129 ms
+Tasca 2 · 169 ms
+Tasca 0 · 171 ms
+Tasca 4 · 253 ms
+Tasca 5 · 256 ms
+
+$ UV_THREADPOOL_SIZE=2 node pool.js
+Fils del pool: 2
+Totes les tasques enviades: el fil principal ja està lliure
+Tasca 0 · 130 ms
+Tasca 1 · 146 ms
+Tasca 2 · 261 ms
+Tasca 3 · 269 ms
+Tasca 4 · 389 ms
+Tasca 5 · 392 ms
+
+$ UV_THREADPOOL_SIZE=6 node pool.js
+Fils del pool: 6
+Totes les tasques enviades: el fil principal ja està lliure
+Tasca 4 · 134 ms
+Tasca 3 · 135 ms
+Tasca 1 · 232 ms
+Tasca 2 · 232 ms
+Tasca 0 · 235 ms
+Tasca 5 · 240 ms
+```
+
+- 4 fils: acaben en 2 grups
+- 2 fils: acaben en 3 grups
+- 6 fils: acaben en 1 sol grup
+
+Extra: ```pbkdf2Sync()```
+```
+$ node pool.extra.js
+Fils del pool: 4 (per defecte)
+Tasca 0 · 125 ms
+Tasca 1 · 251 ms
+Tasca 2 · 371 ms
+Tasca 3 · 489 ms
+Tasca 4 · 609 ms
+Tasca 5 · 729 ms
+Totes les tasques enviades: el fil principal ja està lliure
+
+$ UV_THREADPOOL_SIZE=2 node pool.extra.js
+Fils del pool: 2
+Tasca 0 · 121 ms
+Tasca 1 · 240 ms
+Tasca 2 · 360 ms
+Tasca 3 · 480 ms
+Tasca 4 · 607 ms
+Tasca 5 · 727 ms
+Totes les tasques enviades: el fil principal ja està lliure
+
+$ UV_THREADPOOL_SIZE=6 node pool.extra.js
+Fils del pool: 6
+Tasca 0 · 123 ms
+Tasca 1 · 243 ms
+Tasca 2 · 366 ms
+Tasca 3 · 491 ms
+Tasca 4 · 614 ms
+Tasca 5 · 737 ms
+Totes les tasques enviades: el fil principal ja està lliure
+```
+
+- Triga gairebé el triple, independentment de la quantitat de fils, ja que la funció síncrona fa que els fils s'esperin a que acabi.
