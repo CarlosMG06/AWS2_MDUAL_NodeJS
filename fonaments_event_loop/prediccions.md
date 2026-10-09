@@ -95,3 +95,36 @@ Des del mòdul principal, varia quin surt primer perquè si el bucle:
 - arriba a la fase timers **després** que venci 1 ms: acaba el timeout, immediate surt segon
 
 Des d'un callback d'E/S, el bucle sempre està a la fase poll, i la següent sempre és check. Per tant, immediate sempre surt primer.
+
+## Pas 3
+
+ Codi **casC.js**
+ ```js
+setTimeout(() => console.log("1"), 10);
+setTimeout(() => console.log("2"), 0);
+const inici = Date.now();
+while (Date.now() - inici < 50) {}
+console.log("3");
+```
+
+- Mostrarà "3 2 1". Mentre el bucle ```while``` està actiu, els dos timeouts no estan temporitzant el temps que passa.
+
+*Correcte*
+
+---
+Resultat esperat - **bloqueig.js**
+```
+$ node bloqueig.js
+tic 1 · 201 ms
+tic 2 · 401 ms
+tic 3 · 601 ms
+tic 4 · 802 ms
+Comença la feina pesada (2 s)...
+Feina feta
+tic 5 · 2902 ms
+…
+tic 8 · 3504 ms
+Salt més gran entre tics: 2100 ms
+```
+
+- S'han perdut 20 tics. El tic 5 només surt una sola vegada perquè el bucle ```while``` de la funció ```ocupa(ms)``` fa que s'esperi l'interval.
