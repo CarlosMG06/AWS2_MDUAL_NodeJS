@@ -3,7 +3,6 @@
 ## Pas 0
 
 Codi **diagnostic.js**
-
 ```js
 console.log("A");
 setTimeout(() => console.log("B"), 0);
@@ -26,6 +25,7 @@ Les lletres sortiran en l'ordre: "**A G D C B E F**"
 *Correcte*
 
 ## Pas 1
+
 Punt de control - **Cues niades**
 ```js
 // Cas A
@@ -129,6 +129,25 @@ Salt més gran entre tics: 2100 ms
 
 - S'han perdut 20 tics. El tic 5 només surt una sola vegada perquè el bucle ```while``` de la funció ```ocupa(ms)``` fa que s'esperi l'interval.
 
+## Pas 4
+
+Resultat **lectura.js**
+```
+$ node lectura.js
+íncron: 5 lectures en 113 ms · tics: 0 · salt màxim: 113
+Lectures asíncrones en marxa...
+Asíncron: 5 lectures en 43 ms · tics: 39 · salt màxim: 4
+
+// Amb utf8
+$ node lectura.js
+íncron: 5 lectures en 1029 ms · tics: 0 · salt màxim: 1029
+Lectures asíncrones en marxa...
+Asíncron: 5 lectures en 430 ms · tics: 38 · salt màxim: 238
+```
+
+- En afegir llegir amb utf8, puja el salt màxim de l'asíncrona. 
+- Això és perquè la decodificació utf8 es fa **en el fil principal**, i no pas en el thread pool com la lectura en si dels bytes del fitxer.
+
 ## Pas 5
 
 Resultat **pool.js**
@@ -168,6 +187,7 @@ Tasca 5 · 240 ms
 - 2 fils: acaben en 3 grups
 - 6 fils: acaben en 1 sol grup
 
+---
 Extra: ```pbkdf2Sync()```
 ```
 $ node pool.extra.js
@@ -229,3 +249,18 @@ A trossos: 348515 primers en 2842 ms · tics: 0 · salt màxim 2842
 
 - Quan els trossos decreixen, creixen els tics i decreixen els salts, i viceversa.
 - En canviar ```setImmediate``` per ```process.nextTick```, nextTick mai deixa que el temporatizador ```batec``` s'executi.
+
+## Repte final
+
+Resultat **servidor.js**
+```
+$ node servidor.js 
+Servidor a http://localhost:3000 (Ctrl+C per aturar)
+13:35:13 · GET /lent
+13:35:18 · GET /
+13:35:21 · GET /espera
+13:35:21 · GET /
+```
+
+- Obrint ```/lent``` seguit de ```/```, ```/``` respon després de 5 segons, esperant a ```ocupa```.
+- Obrint ```/espera``` seguit de ```/```, ```/```respon a l'instant perquè ```setTimeout``` no bloqueja el fil.

@@ -43,7 +43,3 @@ for (let i = 0; i < 5; i++) {
     }
   });
 }
-
-// en afegir llegir amb utf8, puja el salt màxim de l'asíncrona,
-// perquè la decodificació utf8 es fa en el fil principal,
-// i no pas en el thread pool com la lectura en si dels bytes del fitxer
