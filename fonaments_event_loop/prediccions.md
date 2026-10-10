@@ -202,3 +202,30 @@ Totes les tasques enviades: el fil principal ja està lliure
 ```
 
 - Triga gairebé el triple, independentment de la quantitat de fils, ja que la funció síncrona fa que els fils s'esperin a que acabi.
+
+## Pas 6
+
+Resultat **trossos.js**
+```
+$ node trossos.js
+D'un cop:  348515 primers en 2831 ms · tics: 0 · salt màxim 2831
+A trossos: 348515 primers en 2824 ms · tics: 99 · salt màxim 40
+
+// TROS = 5_000
+$ node trossos.js
+D'un cop:  348515 primers en 2891 ms · tics: 0 · salt màxim 2891
+A trossos: 348515 primers en 2886 ms · tics: 992 · salt màxim 6
+
+// TROS = 500_000
+$ node trossos.js
+D'un cop:  348515 primers en 2841 ms · tics: 0 · salt màxim 2841
+A trossos: 348515 primers en 2844 ms · tics: 9 · salt màxim 389
+
+// canviar setImmediate per process.nextTick
+$ node trossos.js
+D'un cop:  348515 primers en 2844 ms · tics: 0 · salt màxim 2844
+A trossos: 348515 primers en 2842 ms · tics: 0 · salt màxim 2842
+```
+
+- Quan els trossos decreixen, creixen els tics i decreixen els salts, i viceversa.
+- En canviar ```setImmediate``` per ```process.nextTick```, nextTick mai deixa que el temporatizador ```batec``` s'executi.
