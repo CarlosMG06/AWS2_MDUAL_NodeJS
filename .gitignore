@@ -1,0 +1,4 @@
+node_modules/
+.env
+*.log
+fonaments_event_loop/gran.txt
