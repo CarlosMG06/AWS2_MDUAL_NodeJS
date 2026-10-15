@@ -1,0 +1,5 @@
+[
+  { "nom": "HP 14", "valor": 450, "estat": "disponible" },
+  { "nom": "iPad", "valor": 0, "estat": "disponible" },
+  { "nom": "BenQ MS560", "valor": 310, "estat": "prestat", "prestatA": "Pau" }
+]
