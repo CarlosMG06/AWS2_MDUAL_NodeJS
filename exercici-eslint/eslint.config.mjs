@@ -1,16 +1,16 @@
 import js from "@eslint/js";
 import globals from "globals";
-import { defineConfig, globalIgnores } from "eslint/config";
+import stylistic from "@stylistic/eslint-plugin";
+import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["coverage/"]),
-  { 
+  {
     files: ["**/*.{js,mjs,cjs}"],
     plugins: { js },
     extends: ["js/recommended"],
     languageOptions: { globals: globals.node },
   },
-  { 
+  {
     files: ["**/*.js"],
     languageOptions: { sourceType: "commonjs" },
   },
@@ -18,7 +18,13 @@ export default defineConfig([
     rules: {
       "no-var": "error",
       "prefer-const": "error",
-      eqeqeq: "error",
+      "eqeqeq": "error",
     },
   },
+  stylistic.configs.customize({
+    quotes: "double",
+    semi: true,
+    braceStyle: "1tbs",
+    arrowParens: true,
+  }),
 ]);
