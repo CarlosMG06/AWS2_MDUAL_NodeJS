@@ -1,0 +1,24 @@
+import js from "@eslint/js";
+import globals from "globals";
+import { defineConfig, globalIgnores } from "eslint/config";
+
+export default defineConfig([
+  globalIgnores(["coverage/"]),
+  { 
+    files: ["**/*.{js,mjs,cjs}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.node },
+  },
+  { 
+    files: ["**/*.js"],
+    languageOptions: { sourceType: "commonjs" },
+  },
+  {
+    rules: {
+      "no-var": "error",
+      "prefer-const": "error",
+      eqeqeq: "error",
+    },
+  },
+]);

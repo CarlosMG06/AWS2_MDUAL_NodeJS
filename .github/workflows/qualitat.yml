@@ -1,0 +1,22 @@
+name: Qualitat del codi
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  qualitat:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        projecte: [fonaments-node, fonaments-node-js-modern, fonaments-node-event-loop]
+    defaults:
+      run:
+        working-directory: ${{ matrix.projecte }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run lint -- --max-warnings 0
+      - run: npm run test --if-present
