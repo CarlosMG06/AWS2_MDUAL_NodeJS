@@ -2,7 +2,7 @@
 
 ### 1.
 
-Resultat ```npx eslint revisa.js```:
+Resultat `npx eslint revisa.js`:
 ```
    2:7   error  'path' is assigned a value but never used                        no-unused-vars
   13:12  error  'err' is defined but never used                                  no-unused-vars
@@ -20,7 +20,7 @@ Resultat ```npx eslint revisa.js```:
 
 ### 2.
 
-Canvis a ```revisa.js```:
+Canvis a `revisa.js`:
 ```
  1    1   const fs = require("node:fs");
  2     —  const path = require("node:path");
@@ -49,11 +49,11 @@ Canvis a ```revisa.js```:
 
 ### 3.
 
-L'error que no ESLint no veu és que la propietat ```length``` de la variable ```numeros``` està escrita malament (```lenght```). 
+L'error que ESLint no veu és que la propietat `length` de la variable `numeros` està escrita malament (`lenght`). 
 
-ESLint no el pot detectar perquè ```numeros``` és un paràmetre de la funció ```mitjana```, així que és de tipus ```any``` i no té cap propietat definida.
+ESLint no el pot detectar perquè `numeros` és un paràmetre de la funció `mitjana`, així que és de tipus `any` i no té cap propietat definida.
 
-Canvi a ```revisa.js```:
+Canvi a `revisa.js`:
 ```
  6     —    return suma / numeros.lenght;
       6+    return suma / numeros.length;

@@ -2,7 +2,7 @@
 
 ## Pas 0
 
-Codi **diagnostic.js**
+Codi `diagnostic.js`:
 ```js
 console.log("A");
 setTimeout(() => console.log("B"), 0);
@@ -26,7 +26,7 @@ Les lletres sortiran en l'ordre: "**A G D C B E F**"
 
 ## Pas 1
 
-Punt de control - **Cues niades**
+Punt de control - **Cues niades**:
 ```js
 // Cas A
 process.nextTick(() => console.log("1"));
@@ -61,7 +61,7 @@ Promise.resolve().then(() => setTimeout(() => console.log("5"), 0));
 
 ## Pas 2
 
-Codi **fases.js**
+Codi `fases.js`:
 ```js
 const fs = require("node:fs");
 
@@ -74,7 +74,7 @@ fs.readFile(__filename, (err, data) => {
 });
 ```
 
-Resultat esperat
+Resultat esperat:
 ```
 $ node fases.js
 principal · immediate
@@ -98,7 +98,7 @@ Des d'un callback d'E/S, el bucle sempre està a la fase poll, i la següent sem
 
 ## Pas 3
 
-Codi **casC.js**
+Codi `casC.js`:
 ```js
 setTimeout(() => console.log("1"), 10);
 setTimeout(() => console.log("2"), 0);
@@ -107,12 +107,12 @@ while (Date.now() - inici < 50) {}
 console.log("3");
 ```
 
-- Mostrarà "3 2 1". Mentre el bucle ```while``` està actiu, els dos timeouts no estan temporitzant el temps que passa.
+- Mostrarà "3 2 1". Mentre el bucle `while` està actiu, els dos timeouts no estan temporitzant el temps que passa.
 
 *Correcte*
 
 ---
-Resultat esperat - **bloqueig.js**
+Resultat esperat - `bloqueig.js`:
 ```
 $ node bloqueig.js
 tic 1 · 201 ms
@@ -127,11 +127,11 @@ tic 8 · 3504 ms
 Salt més gran entre tics: 2100 ms
 ```
 
-- S'han perdut 20 tics. El tic 5 només surt una sola vegada perquè el bucle ```while``` de la funció ```ocupa(ms)``` fa que s'esperi l'interval.
+- S'han perdut 20 tics. El tic 5 només surt una sola vegada perquè el bucle `while` de la funció `ocupa(ms)` fa que s'esperi l'interval.
 
 ## Pas 4
 
-Resultat **lectura.js**
+Resultat `lectura.js`:
 ```
 $ node lectura.js
 íncron: 5 lectures en 113 ms · tics: 0 · salt màxim: 113
@@ -150,7 +150,7 @@ Asíncron: 5 lectures en 430 ms · tics: 38 · salt màxim: 238
 
 ## Pas 5
 
-Resultat **pool.js**
+Resultat `pool.js`:
 ```
 $ node pool.js
 Fils del pool: 4 (per defecte)
@@ -188,7 +188,7 @@ Tasca 5 · 240 ms
 - 6 fils: acaben en 1 sol grup
 
 ---
-Extra: ```pbkdf2Sync()```
+Extra: `pbkdf2Sync()`
 ```
 $ node pool.extra.js
 Fils del pool: 4 (per defecte)
@@ -225,7 +225,7 @@ Totes les tasques enviades: el fil principal ja està lliure
 
 ## Pas 6
 
-Resultat **trossos.js**
+Resultat `trossos.js`:
 ```
 $ node trossos.js
 D'un cop:  348515 primers en 2831 ms · tics: 0 · salt màxim 2831
@@ -248,11 +248,11 @@ A trossos: 348515 primers en 2842 ms · tics: 0 · salt màxim 2842
 ```
 
 - Quan els trossos decreixen, creixen els tics i decreixen els salts, i viceversa.
-- En canviar ```setImmediate``` per ```process.nextTick```, nextTick mai deixa que el temporatizador ```batec``` s'executi.
+- En canviar `setImmediate` per `process.nextTick`, nextTick mai deixa que el temporatizador `batec` s'executi.
 
 ## Repte final
 
-Resultat **servidor.js**
+Resultat `servidor.js`:
 ```
 $ node servidor.js 
 Servidor a http://localhost:3000 (Ctrl+C per aturar)
@@ -262,5 +262,5 @@ Servidor a http://localhost:3000 (Ctrl+C per aturar)
 13:35:21 · GET /
 ```
 
-- Obrint ```/lent``` seguit de ```/```, ```/``` respon després de 5 segons, esperant a ```ocupa```.
-- Obrint ```/espera``` seguit de ```/```, ```/```respon a l'instant perquè ```setTimeout``` no bloqueja el fil.
+- Obrint `/lent` seguit de `/`, `/` respon després de 5 segons, esperant a `ocupa`.
+- Obrint `/espera` seguit de `/`, `/`respon a l'instant perquè `setTimeout` no bloqueja el fil.
