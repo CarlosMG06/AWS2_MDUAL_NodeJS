@@ -1,0 +1,4 @@
+# Es regenera amb npm run reset
+data/material.json
+# Sortida de importa.js
+importats.json

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "f38b2c1e-6a4d-4f0e-9b7a-2d5c8e1f3a90",
+    "nom": "Portàtil HP 14",
+    "tipus": "portatil",
+    "aula": "A12",
+    "valor": 450,
+    "estat": "disponible",
+    "dataAlta": "2025-09-08T08:15:00.000Z"
+  },
+  {
+    "id": "f3f4a7d2-1b3c-4e5f-8a9b-0c1d2e3f4a5b",
+    "nom": "Portàtil Lenovo ThinkPad E14",
+    "tipus": "portatil",
+    "aula": "A12",
+    "valor": 520,
+    "estat": "prestat",
+    "dataAlta": "2025-09-08T08:20:00.000Z",
+    "prestatA": "Marta",
+    "dataPrestec": "2026-10-14T08:00:00.000Z"
+  },
+  {
+    "id": "9a1c3e5f-7b2d-4c6e-8f0a-1b2c3d4e5f60",
+    "nom": "Portàtil Dell Latitude 5440",
+    "tipus": "portatil",
+    "aula": "A14",
+    "valor": 610,
+    "estat": "disponible",
+    "dataAlta": "2025-11-12T10:05:00.000Z"
+  },
+  {
+    "id": "4d6f8a0c-2e4a-4b6c-9d8e-0f1a2b3c4d5e",
+    "nom": "Portàtil Acer Aspire 3",
+    "tipus": "portatil",
+    "aula": "A14",
+    "valor": 380,
+    "estat": "avariat",
+    "dataAlta": "2024-10-01T09:00:00.000Z"
+  },
+  {
+    "id": "7dab3f91-5c2e-4a8b-b6d4-3e9f1a7c5b20",
+    "nom": "iPad 9a generació",
+    "tipus": "tauleta",
+    "aula": "A14",
+    "valor": 0,
+    "estat": "disponible",
+    "dataAlta": "2026-01-20T11:30:00.000Z"
+  },
+  {
+    "id": "70eb6c24-8d1f-4b3a-a5e7-9c2b4d6f8a10",
+    "nom": "Tauleta Samsung Galaxy Tab A9",
+    "tipus": "tauleta",
+    "aula": "Biblioteca",
+    "valor": 179,
+    "estat": "prestat",
+    "dataAlta": "2026-02-03T09:45:00.000Z",
+    "prestatA": "Joan",
+    "dataPrestec": "2026-10-14T08:00:00.000Z"
+  },
+  {
+    "id": "b3e5a7c9-1d3f-4a5b-8c7d-9e0f1a2b3c4d",
+    "nom": "Projector BenQ MS560",
+    "tipus": "projector",
+    "aula": "A12",
+    "valor": 310,
+    "estat": "prestat",
+    "dataAlta": "2024-09-15T07:50:00.000Z",
+    "prestatA": "Pau",
+    "dataPrestec": "2026-10-14T08:00:00.000Z"
+  },
+  {
+    "id": "e5127b9d-3f5a-4c7e-9a1b-2c3d4e5f6a7b",
+    "nom": "Projector Epson EB-W51",
+    "tipus": "projector",
+    "aula": "Biblioteca",
+    "valor": 420,
+    "estat": "avariat",
+    "dataAlta": "2025-03-10T12:00:00.000Z"
+  },
+  {
+    "id": "c1d3e5f7-9a2b-4c4d-8e6f-0a1b2c3d4e5f",
+    "nom": "Cable HDMI 2 m",
+    "tipus": "cable",
+    "aula": "A12",
+    "valor": 15,
+    "estat": "disponible",
+    "dataAlta": "2025-09-08T08:30:00.000Z"
+  },
+  {
+    "id": "2b4d6f8a-0c1e-4a3b-9c5d-7e9f0a1b2c3d",
+    "nom": "Cable USB-C a HDMI",
+    "tipus": "cable",
+    "aula": "Biblioteca",
+    "valor": 12,
+    "estat": "disponible",
+    "dataAlta": "2025-09-08T08:31:00.000Z"
+  },
+  {
+    "id": "5e7a9c1e-3b5d-4f7a-8b9c-1d2e3f4a5b6c",
+    "nom": "Webcam Logitech C920",
+    "tipus": "altres",
+    "aula": "A14",
+    "valor": 89,
+    "estat": "disponible",
+    "dataAlta": "2026-04-22T14:10:00.000Z"
+  },
+  {
+    "id": "8f0b2d4f-6a8c-4e0b-9d1f-3a5c7e9b1d2f",
+    "nom": "Altaveu JBL Go 3",
+    "tipus": "altres",
+    "aula": "Biblioteca",
+    "valor": 50,
+    "estat": "disponible",
+    "dataAlta": "2026-05-05T10:00:00.000Z"
+  }
+]
