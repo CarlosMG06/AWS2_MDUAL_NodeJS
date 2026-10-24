@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        projecte: [fonaments-node, fonaments-node-js-modern, fonaments-node-event-loop]
+        projecte: [fonaments_node, fonaments_node_js_modern, fonaments_node_event_loop]
     defaults:
       run:
         working-directory: ${{ matrix.projecte }}
