@@ -2,6 +2,8 @@
 // GET /material[?estat=...]   GET /material/<id>   POST /prestecs
 const http = require("node:http");
 const material = require("./material");
+const { logger } = require("./logger");
+const crypto = require("node:crypto");
 
 const PORT = Number(process.env.PORT ?? 3000);
 const TOKEN = process.env.TOKEN ?? "aula-2026";
@@ -10,6 +12,7 @@ const TOKEN = process.env.TOKEN ?? "aula-2026";
 let inventari = material.llegir();
 
 function enviar(res, status, dades) {
+  res.statusCode = status;
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
   res.end(JSON.stringify(dades));
 }
@@ -17,9 +20,10 @@ function enviar(res, status, dades) {
 // Els errors amb status són culpa de la petició (400, 404, 409...); la resta, un error nostre
 function enviarError(res, err) {
   if (err.status) {
+    logger.error({ status: err.status, message: err.message }, "error");
     enviar(res, err.status, { error: err.message });
   } else {
-    console.log("error");
+    logger.error({ status: 500, message: err.message }, "error");
     enviar(res, 500, { error: "Error intern" });
   }
 }
@@ -43,10 +47,23 @@ function prestec(req, res, cos) {
 }
 
 const servidor = http.createServer((req, res) => {
-  console.log(new Date().toLocaleString() + " " + req.method + " " + req.url + " " + JSON.stringify(req.headers));
+  const inici = performance.now();
+
+  req.id = req.headers["x-request-id"] ?? crypto.randomUUID();
+  req.log = logger.child({ reqId: req.id });
+  res.setHeader("X-Request-Id", req.id);
+
+  // finish: la resposta ja ha sortit; sabem l'estat i el temps
+  res.on("finish", () => {
+    const ms = Math.round(performance.now() - inici);
+    const estat = res.statusCode;
+    const nivell = "info";
+    const dades = { metode: req.method, ruta: req.url, estat, ms };
+    req.log[nivell](dades, "petició atesa");
+  });
+
   const url = new URL(req.url, "http://localhost");
   const parts = url.pathname.split("/").filter(Boolean);
-
   try {
     if (req.method === "GET" && url.pathname === "/material") {
       const estat = url.searchParams.get("estat");
@@ -73,4 +90,4 @@ const servidor = http.createServer((req, res) => {
   }
 });
 
-servidor.listen(PORT, () => console.log("Servidor en marxa"));
+servidor.listen(PORT, () => logger.info({ port: PORT }, "servidor escoltant"));
