@@ -14,17 +14,16 @@ let inventari = material.llegir();
 function enviar(res, status, dades) {
   res.statusCode = status;
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
-  res.end(JSON.stringify(dades));
+  res.end(JSON.stringify({ estat: status, ...dades }));
 }
 
 // Els errors amb status són culpa de la petició (400, 404, 409...); la resta, un error nostre
-function enviarError(res, err) {
+function enviarError(req, res, err) {
   if (err.status) {
-    logger.error({ status: err.status, message: err.message }, "error");
     enviar(res, err.status, { error: err.message });
   } else {
-    logger.error({ status: 500, message: err.message }, "error");
-    enviar(res, 500, { error: "Error intern" });
+    req.log.error({ err }, "error inesperat");
+    enviar(res, 500, { error: "Error intern", ref: req.id });
   }
 }
 
@@ -33,7 +32,6 @@ function prestec(req, res, cos) {
     return enviar(res, 401, { error: "Cal un token vàlid" });
   }
   const { id, persona } = JSON.parse(cos);
-  console.log("Préstec:", id, persona);
   // Només es presta a correus del centre
   if (!persona.email.endsWith("@institut.cat")) {
     return enviar(res, 403, { error: "Només per a correus del centre" });
@@ -41,6 +39,7 @@ function prestec(req, res, cos) {
   const nou = material.prestar(inventari, id, persona.nom);
   material.desarAsync(nou, (err) => {
     if (err) return enviarError(res, err);
+    logger.info({ id: id }, "préstec registrat");
     inventari = nou;
     enviar(res, 201, material.cercar(inventari, id));
   });
@@ -57,7 +56,7 @@ const servidor = http.createServer((req, res) => {
   res.on("finish", () => {
     const ms = Math.round(performance.now() - inici);
     const estat = res.statusCode;
-    const nivell = "info";
+    const nivell = estat >= 500 ? "error" : estat >= 400 ? "warn" : "info";
     const dades = { metode: req.method, ruta: req.url, estat, ms };
     req.log[nivell](dades, "petició atesa");
   });
@@ -79,14 +78,14 @@ const servidor = http.createServer((req, res) => {
         try {
           prestec(req, res, cos);
         } catch (err) {
-          enviarError(res, err);
+          enviarError(req, res, err);
         }
       });
       return;
     }
     enviar(res, 404, { error: "Ruta no trobada" });
   } catch (err) {
-    enviarError(res, err);
+    enviarError(req, res, err);
   }
 });
 
