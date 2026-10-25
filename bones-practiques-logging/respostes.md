@@ -62,10 +62,41 @@ Apareixen dades sensibles: e-mails (`email`), noms amb cognom (`nom`) i dades d'
 
 ## Pas 6 · Incidència (logs/produccio.ndjson)
 1. Quantes peticions hi ha hagut i amb quin estat han acabat?
+
+Hi ha hagut 813 peticions.
+- 522 peticions han acabat amb estat 200.
+- 113 peticions han acabat amb estat 201.
+- 20 peticions han acabat amb estat 400.
+- 38 peticions han acabat amb estat 401.
+- 36 peticions han acabat amb estat 403.
+- 32 peticions han acabat amb estat 404.
+- 46 peticions han acabat amb estat 409.
+- 6 peticions han acabat amb estat 500.
+
 2. Petició 3c9e1b2a: quin error hi ha, a quin fitxer i a quina línia?
+
+Hi ha el següent error: 
+- `TypeError: Cannot read properties of undefined (reading 'endsWith)`
+- Fitxer `servidor.js`
+- Línia 33
+
+És a dir, la línia amb `  if (!persona.email.endsWith("@institut.cat")) {`. Com no té `?.`, si no hi ha email, dona error.
+
 3. Des de quan hi ha errors 500? Coincideix amb alguna cosa que hagi passat al servidor?
+
+Hi ha errors 500 des de 07:16 UTC, coincidint amb el reinici del servidor a las 07:00 UTC.
+
+És possible que aquell reinici va introduir la comprovació de correus del centre (que és el que fa la línia amb la fallada).
+
 4. Quina ha estat la petició més lenta?
+
+Ha estat la petició amb id `4033bce4` a les 10:03 UTC, la qual va trigar 2,318 segons.
+
 5. Entre les 09:10 i les 09:24 (UTC) hi ha molts 401: què creus que va passar?
+
+El codi d'estat `401` vol dir `No Autoritzat`. Per tant, sospito que hi va haver alguna mena d'atac al servidor, tractant de fer peticions sense credencials.
 
 ## Conclusions
 - Què ha canviat entre el Pas 1 i el Pas 6 per poder respondre les mateixes preguntes?
+
+A més a més que el logging és summament més detallat, també està organitzat en un fitxer JSON, de manera que és considerablement més senzill fer-ne consultes.

@@ -32,6 +32,9 @@ function prestec(req, res, cos) {
     return enviar(res, 401, { error: "Cal un token vàlid" });
   }
   const { id, persona } = JSON.parse(cos);
+  if (!persona.email) {
+    return enviar(res, 400, { error: "Cal el correu de la persona a qui es presta" });
+  }
   // Només es presta a correus del centre
   if (!persona.email.endsWith("@institut.cat")) {
     return enviar(res, 403, { error: "Només per a correus del centre" });
