@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const material = require("./material");
 
 const missatgeUs = () => {
-  console.error("Ús: node importa.js <fitxer.json> [-q|-v|--quiet|--verbose]");
+  console.error("Ús: node importa.js <fitxer.csv> [-q|-v|--quiet|--verbose]");
   process.exit(2);
 };
 
@@ -14,7 +14,10 @@ const flag = args[1] ?? "";
 let nivell = "info";
 if (flag === "--quiet" || flag === "-q") nivell = "error";
 else if (flag === "--verbose" || flag === "-v") nivell = "debug";
-else if (flag.includes("--")) missatgeUs();
+else if (flag) {
+  console.error(`Opció desconeguda: ${flag}`);
+  missatgeUs();
+} 
 // Cada funció escriu a stderr si arriba al nivell triat
 const log = {};
 for (const [nom, valor] of Object.entries(NIVELLS)) {
@@ -50,7 +53,8 @@ try {
       log.debug(`Fila ${i + 2} importada: ${nou.nom} (${nou.id.slice(0, 8)})`);
     } catch (err) {
       log.warn(`Fila ${i + 2} rebutjada: ${err.message}`);
-    }
+      process.exitCode = 1;
+    } 
   });
   const rebutjatsNum = files.length - importats.length;
 
@@ -62,5 +66,3 @@ try {
   log.error(`Error desconegut: ${err}`);
   process.exit(1);
 }
-
-process.exitCode = 1;
