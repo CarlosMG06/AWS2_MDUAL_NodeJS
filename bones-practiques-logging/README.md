@@ -54,12 +54,15 @@ git push
 ## Ordres
 
 ```
-npm start          # engega el servidor (Ctrl+C l'atura)
-npm run dev        # el mateix, amb els logs formatats per pino-pretty
-npm run trafic     # en un altre terminal: envia les peticions de prova
+TOKEN=un-token-local npm start          # engega el servidor (Ctrl+C l'atura)
+TOKEN=un-token-local npm run dev        # el mateix, amb els logs formatats per pino-pretty
+TOKEN=un-token-local npm run trafic     # en un altre terminal: envia les peticions de prova
 npm run reset      # restaura data/material.json
+npm test           # proves del servidor
 npm run lint       # ESLint, com a la sessió 4
 ```
+
+El servidor i l'script de tràfic exigeixen `TOKEN` a l'entorn; no hi ha cap credencial per defecte.
 
 `trafic.js` fa préstecs: per repetir-lo, atura el servidor, executa `npm run reset` i torna'l a engegar.
 

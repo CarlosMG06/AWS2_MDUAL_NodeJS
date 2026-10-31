@@ -39,3 +39,22 @@ Aquesta és la resposta exacta de la IA amb tots els detalls:
 >7. **Hacer que la consulta de logs tolere entradas vacías o incompletas.** `consulta.js` asume que el archivo contiene líneas válidas y que siempre hay peticiones con estados `500`, `401` y al menos una petición para el `reduce`. Conviene aceptar la ruta como argumento y manejar esos casos vacíos; esto mejora el script sin depender del contenido actual de `logs/` (`consulta.js`).
 >
 >Como comprobación, añadiría pruebas con `node:test` para JSON mal formado, campos ausentes, errores de escritura y dos préstamos concurrentes del mismo elemento.
+
+## Aplicació de suggeriments
+
+Després de l'implementació de les propostes, aquesta és la explicació que dona la IA sobre les eines emprades:
+
+>Se usaron APIs nativas de Node.js y la librería Pino que ya tenía el proyecto.
+>
+>| # | Sugerencia | Herramientas y cómo se aplicaron | Archivos tocados |
+>|---|---|---|---|
+>| 1 | Gestionar errores al guardar un préstamo | Se envolvió el callback de `desarAsync` en una `Promise`, para poder esperar el resultado y propagar los errores al manejador `enviarError(req, res, err)` con sus argumentos correctos. | `servidor.js`, `material.js` |
+>| 2 | Responder `400` ante JSON inválido o campos ausentes | `JSON.parse` se protege con `try/catch`; después se validan el objeto recibido y los campos `id`, `persona`, `email` y `nom`. Los errores de validación llevan `status = 400`. | `servidor.js` |
+>| 3 | Evitar pérdidas con préstamos concurrentes | Una cola basada en `Promise` (`cuaPrestecs`) serializa las peticiones de préstamo. La escritura usa `fs.writeFile` en un temporal único —con `crypto.randomUUID()`— y luego `fs.rename` para publicar el inventario atómicamente. | `servidor.js`, `material.js`, `test/servidor.test.js` |
+>| 4 | Vincular el evento de préstamo con la petición | Se registra el préstamo con `req.log.info`, el logger Pino asociado a la petición y al `reqId`; así se puede relacionar con el log HTTP de finalización. | `servidor.js` |
+>| 5 | Reducir la exposición de credenciales y datos en logs | El servidor y el generador de tráfico requieren `TOKEN` del entorno y ya no usan un valor por defecto. El log registra solo el `pathname`, sin la query. Pino aplica redacción a correos, autorizaciones y tokens. | `servidor.js`, `trafic.js`, `logger.js`, `README.md` |
+>| 6 | Hacer más sólida la importación CSV | Se implementó `parseCSV`, que contempla campos entre comillas, separadores y saltos de línea dentro de campos y comillas escapadas. También se validan argumentos, cabecera y número de columnas; los registros pasan por `material.crear`. | `importa.js` |
+>| 7 | Hacer que la consulta de logs tolere entradas vacías o incompletas | `consulta.js` acepta una ruta opcional, ignora líneas vacías y avisa si una línea NDJSON no se puede analizar. Comprueba los campos antes de usarlos y contempla que no haya errores 500/401 o peticiones con tiempo. | `consulta.js` |
+>| 8 | Añadir pruebas con `node:test` | Se usaron `node:test`, `node:assert/strict` y `fetch` para probar JSON mal formado, campos ausentes, errores de escritura y dos préstamos concurrentes del mismo elemento. Se añadió el script `npm test`. | `test/servidor.test.js`, `package.json`, `README.md` |
+>
+>Sobre el `Promise` seleccionado: convierte el callback de guardado en una operación que se puede esperar. Así la cola no procesa el siguiente préstamo hasta que termine la escritura, y un fallo llega al manejador de errores en vez de confirmar el préstamo.

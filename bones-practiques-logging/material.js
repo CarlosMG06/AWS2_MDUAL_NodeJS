@@ -33,9 +33,25 @@ function llegir() {
 // Desa l'inventari de manera síncrona (per a scripts)
 const desar = (llista) => fs.writeFileSync(RUTA, JSON.stringify(llista, null, 2) + "\n");
 
-// Desa l'inventari sense bloquejar el fil (per al servidor)
-const desarAsync = (llista, callback) =>
-  fs.writeFile(RUTA, JSON.stringify(llista, null, 2) + "\n", callback);
+// Desa primer en un fitxer temporal i publica'l amb un canvi de nom atòmic.
+const desarAsync = (llista, callback) => {
+  const temporal = `${RUTA}.${crypto.randomUUID()}.tmp`;
+  const fallada = (err) => {
+    fs.unlink(temporal, (errNeteja) => {
+      if (errNeteja && errNeteja.code !== "ENOENT") {
+        return callback(new AggregateError([err, errNeteja], "No s'ha pogut desar ni netejar l'inventari"));
+      }
+      callback(err);
+    });
+  };
+  fs.writeFile(temporal, JSON.stringify(llista, null, 2) + "\n", (err) => {
+    if (err) return fallada(err);
+    fs.rename(temporal, RUTA, (err) => {
+      if (!err) return callback(null);
+      fallada(err);
+    });
+  });
+};
 
 function crear({ nom, tipus, aula, valor }) {
   if (!nom || !aula) throw errorClient("Falten dades: cal nom i aula", 400);

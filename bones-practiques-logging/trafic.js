@@ -3,7 +3,11 @@
 const http = require("node:http");
 
 const PORT = Number(process.env.PORT ?? 3000);
-const TOKEN = process.env.TOKEN ?? "aula-2026";
+const TOKEN = process.env.TOKEN;
+if (!TOKEN) {
+  console.error("Cal definir TOKEN abans d'enviar tràfic");
+  process.exit(2);
+}
 const amb = { Authorization: `Bearer ${TOKEN}` };
 
 const peticions = [

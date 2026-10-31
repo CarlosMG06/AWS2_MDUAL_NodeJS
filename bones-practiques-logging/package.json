@@ -10,6 +10,7 @@
     "start": "node servidor.js",
     "dev": "node servidor.js | pino-pretty",
     "trafic": "node trafic.js",
+    "test": "node --test",
     "reset": "node -e \"require('node:fs').copyFileSync('data/material.original.json', 'data/material.json')\"",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
