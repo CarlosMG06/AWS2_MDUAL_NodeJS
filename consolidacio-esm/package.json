@@ -1,0 +1,30 @@
+{
+  "name": "consolidacio-esm",
+  "version": "1.0.0",
+  "description": "Activitat 6: una API i un client de l'inventari en ES Modules, amb logs i tests",
+  "main": "servidor.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node servidor.js",
+    "dev": "node servidor.js | pino-pretty",
+    "prova-api": "node prova-api.js",
+    "reset": "node -e \"require('node:fs').copyFileSync('data/material.original.json', 'data/material.json')\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "node --test"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "pino": "^10.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "pino-pretty": "^13.2.0"
+  }
+}
