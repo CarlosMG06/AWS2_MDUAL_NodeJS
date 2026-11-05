@@ -1,5 +1,5 @@
 // importa.js · Afegeix a l'inventari el material d'un CSV de compra
-// Ús: node importa.js data/compra-octubre.csv
+// Ús: node importa.js data/compra-octubre.csv [-q|-v|--quiet|--verbose]
 const fs = require("node:fs");
 const material = require("./material");
 
@@ -10,6 +10,9 @@ const missatgeUs = () => {
 
 const NIVELLS = { error: 0, warn: 1, info: 2, debug: 3 };
 const args = process.argv.slice(2);
+if (args.length < 1 || args.length > 2) missatgeUs();
+
+const fitxer = args[0];
 const flag = args[1] ?? "";
 let nivell = "info";
 if (flag === "--quiet" || flag === "-q") nivell = "error";
@@ -17,8 +20,8 @@ else if (flag === "--verbose" || flag === "-v") nivell = "debug";
 else if (flag) {
   console.error(`Opció desconeguda: ${flag}`);
   missatgeUs();
-} 
-// Cada funció escriu a stderr si arriba al nivell triat
+}
+
 const log = {};
 for (const [nom, valor] of Object.entries(NIVELLS)) {
   log[nom] = (missatge) => {
@@ -26,8 +29,57 @@ for (const [nom, valor] of Object.entries(NIVELLS)) {
   };
 }
 
-const fitxer = args[0];
-if (!fitxer) missatgeUs();
+function parseCSV(text) {
+  const files = [];
+  let fila = [];
+  let camp = "";
+  let entreCometes = false;
+  let tancat = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const caracter = text[i];
+    if (entreCometes) {
+      if (caracter === "\"") {
+        if (text[i + 1] === "\"") {
+          camp += "\"";
+          i++;
+        } else {
+          entreCometes = false;
+          tancat = true;
+        }
+      } else {
+        camp += caracter;
+      }
+    } else if (caracter === ";") {
+      fila.push(camp);
+      camp = "";
+      tancat = false;
+    } else if (caracter === "\n" || caracter === "\r") {
+      if (caracter === "\r" && text[i + 1] === "\n") i++;
+      fila.push(camp);
+      files.push(fila);
+      fila = [];
+      camp = "";
+      tancat = false;
+    } else if (caracter === "\"") {
+      if (camp !== "" || tancat) throw new Error(`Cometa inesperada a la posició ${i + 1}`);
+      entreCometes = true;
+    } else if (tancat) {
+      if (caracter !== " " && caracter !== "\t") {
+        throw new Error(`Caràcter inesperat després d'un camp entre cometes a la posició ${i + 1}`);
+      }
+    } else {
+      camp += caracter;
+    }
+  }
+
+  if (entreCometes) throw new Error("Camp CSV sense tancar les cometes");
+  if (camp !== "" || fila.length || tancat) {
+    fila.push(camp);
+    files.push(fila);
+  }
+  return files;
+}
 
 let text;
 try {
@@ -39,14 +91,19 @@ try {
 }
 
 try {
-  // La primera línia és la capçalera: nom;tipus;aula;valor
-  const files = text.trim().split("\n").slice(1);
+  const files = parseCSV(text.replace(/^\uFEFF/, ""));
+  const capcalera = files.shift();
+  if (!capcalera || capcalera.join(";") !== "nom;tipus;aula;valor") {
+    throw new Error("La capçalera ha de ser nom;tipus;aula;valor");
+  }
   const inventari = material.llegir();
   const importats = [];
+  const filesDades = files.filter((fila) => !(fila.length === 1 && fila[0].trim() === ""));
 
-  files.forEach((fila, i) => {
-    const [nom, tipus, aula, valor] = fila.split(";");
+  filesDades.forEach((fila, i) => {
     try {
+      if (fila.length !== 4) throw new Error("Calen exactament quatre camps");
+      const [nom, tipus, aula, valor] = fila;
       const nou = material.crear({ nom, tipus, aula, valor });
       inventari.push(nou);
       importats.push(nou);
@@ -54,15 +111,15 @@ try {
     } catch (err) {
       log.warn(`Fila ${i + 2} rebutjada: ${err.message}`);
       process.exitCode = 1;
-    } 
+    }
   });
-  const rebutjatsNum = files.length - importats.length;
+  const rebutjatsNum = filesDades.length - importats.length;
 
   material.desar(inventari);
-  log.info(`Importació: ${importats.length} importats i ${rebutjatsNum} rebutjats de ${files.length} files`);
+  log.info(`Importació: ${importats.length} importats i ${rebutjatsNum} rebutjats de ${filesDades.length} files`);
 
   console.log(JSON.stringify(importats, null, 2));
 } catch (err) {
-  log.error(`Error desconegut: ${err}`);
+  log.error(`Error d'importació: ${err.message}`);
   process.exit(1);
 }
