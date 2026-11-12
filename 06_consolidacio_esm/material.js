@@ -48,4 +48,13 @@ function prestar(llista, codi, persona) {
   return llista.map((m) => (m.codi === codi ? { ...m, ...prestat } : m));
 }
 
-export { ESTATS, llegir, desar, filtrar, cercar, prestar };
+function retornar(llista, codi) {
+  const element = cercar(llista, codi);
+  if (element.estat !== "prestat") {
+    throw error(409, `No es pot retornar: està ${element.estat}`);
+  }
+  const { prestatA, dataPrestec, ...resta } = element;
+  return llista.map((m) => (m.codi === codi ? { ...resta, estat: "disponible" } : m));
+}
+
+export { ESTATS, llegir, desar, filtrar, cercar, prestar, retornar };

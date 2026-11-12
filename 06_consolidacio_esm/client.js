@@ -4,15 +4,19 @@ const json = { "Content-Type": "application/json" };
 const ordre = process.argv[2];
 const args = process.argv.slice(3);
 
+const ORDRES = ["llista", "mostra", "presta", "retorna"];
+
 const missatgeUs = () => {
-  console.error("Ús: node client.js { llista [estat] | mostra <codi> | presta <codi> <persona> }");
+  console.error("Ús: node client.js { llista [estat] | mostra <codi> | presta <codi> <persona> | retorna <codi> }");
   process.exit(2);
 };
 
 if (!ordre) missatgeUs();
+else if (!ORDRES.includes(ordre)) missatgeUs();
 else if (ordre === "llista" && args.length > 1) missatgeUs();
 else if (ordre === "mostra" && args.length !== 1) missatgeUs();
 else if (ordre === "presta" && args.length < 2) missatgeUs();
+else if (ordre === "retorna" && args.length !== 1) missatgeUs();
 
 let ruta;
 let metode = "GET";
@@ -27,6 +31,10 @@ if (ordre === "llista") {
   ruta = "/prestecs";
   metode = "POST";
   cos = JSON.stringify({ codi: args[0], persona: args.slice(1).join(" ") });
+} else if (ordre === "retorna") {
+  ruta = "/retorns";
+  metode = "POST";
+  cos = JSON.stringify({ codi: args[0] });
 }
 
 // En ES Modules, await funciona fora de funcions (top-level await)
@@ -52,4 +60,9 @@ const elements = Array.isArray(dades) ? dades : [dades];
 for (const elem of elements) {
   const { codi, nom, estat, prestatA } = elem;
   console.log(`${codi.padEnd(13)}  ${nom.padEnd(30)}  ${estat} ${prestatA ? `(${prestatA})` : ""}`);
+
+  if (ordre === "presta")
+    console.error(`Préstec fet: ${codi.padEnd(13)}`);
+  else if (ordre === "retorna")
+    console.error(`Retorn fet: ${codi.padEnd(13)}`);
 }

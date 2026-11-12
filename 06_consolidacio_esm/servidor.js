@@ -34,6 +34,17 @@ function prestec(req, res, dades) {
   });
 }
 
+function retorn(req, res, dades) {
+  const { codi } = dades;
+  const nou = material.retornar(inventari, codi);
+  material.desar(nou, (err) => {
+    if (err) return enviarError(req, res, err);
+    logger.info({ codi: codi }, "retorn registrat");
+    inventari = nou;
+    enviar(res, 200, material.cercar(inventari, codi));
+  });
+}
+
 const servidor = http.createServer((req, res) => {
   const inici = performance.now();
 
@@ -72,6 +83,24 @@ const servidor = http.createServer((req, res) => {
         }
         try {
           prestec(req, res, dades);
+        } catch (err) {
+          enviarError(req, res, err);
+        }
+      });
+      return;
+    }
+    if (req.method === "POST" && url.pathname === "/retorns") {
+      let cos = "";
+      req.on("data", (tros) => (cos += tros));
+      req.on("end", () => {
+        let dades;
+        try {
+          dades = JSON.parse(cos);
+        } catch {
+          return enviar(res, 400, { error: "El cos ha de ser JSON" });
+        }
+        try {
+          retorn(req, res, dades);
         } catch (err) {
           enviarError(req, res, err);
         }

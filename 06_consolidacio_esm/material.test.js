@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { cercar, filtrar, prestar } from "./material.js";
+import { cercar, filtrar, prestar, retornar } from "./material.js";
 
 const inventari = [
   { codi: "M001", nom: "Projector", estat: "disponible" },
@@ -61,5 +61,31 @@ test("prestar amb el nom buit llença error 400", () => {
   assert.throws(
     () => prestar(inventari, "M001", "  "),
     { status: 400 },
+  );
+});
+
+test("retornar un material prestat", () => {
+  const copia = inventari.map((m) => m);
+  const nou = retornar(inventari, "M002");
+  const prestat = nou.find((material) => material.codi === "M002");
+
+  assert.equal(prestat.estat, "disponible");
+  assert.equal(prestat.prestatA, undefined);
+  assert.equal(prestat.dataPrestec, undefined);
+  // Les dades originals no es modifiquen
+  assert.deepEqual(inventari, copia);
+});
+
+test("retornar un material no prestat llença error 409", () => {
+  assert.throws(
+    () => retornar(inventari, "M003"),
+    { status: 409 },
+  );
+});
+
+test("retornar un material inexistent llença error 404", () => {
+  assert.throws(
+    () => retornar(inventari, "M999"),
+    { status: 404 },
   );
 });
