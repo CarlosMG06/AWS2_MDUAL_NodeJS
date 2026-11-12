@@ -1,0 +1,28 @@
+{
+  "name": "projecte-temps",
+  "version": "1.0.0",
+  "description": "Activitat 7 del curs: una API pròpia i un client sobre Open-Meteo",
+  "main": "servidor.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node servidor.js",
+    "dev": "node --watch servidor.js | pino-pretty",
+    "prova-api": "node prova-api.js",
+    "test": "node --test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "pino": "^10.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "pino-pretty": "^13.2.0"
+  }
+}
