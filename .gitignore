@@ -1,5 +1,5 @@
 node_modules/
 .env
 *.log
-fonaments_event_loop/gran.txt
+03_fonaments_event_loop/gran.txt
 package-lock.json
