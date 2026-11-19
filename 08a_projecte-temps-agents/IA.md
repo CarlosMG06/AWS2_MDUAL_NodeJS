@@ -6,7 +6,7 @@ Omple aquest fitxer **mentre treballes**, no al final. Mai hi enganxis claus, co
 
 ## 1 · Les regles (AGENTS.md)
 
-- **Què hi he posat:**
+- **Què hi he posat:** Normes que concernen l'entorn del projecte, el seu estil, i instruccions de treball per l'agent IA.
 - **Una regla que he afegit després, i per què:**
 
 ## 2 · Caça d'errors
