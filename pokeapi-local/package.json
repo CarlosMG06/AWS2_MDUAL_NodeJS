@@ -1,0 +1,14 @@
+{
+  "name": "pokeapi-local",
+  "version": "1.0.0",
+  "description": "Còpia local de PokéAPI (1.025 Pokémon i tipus) per treballar sense connexió",
+  "type": "module",
+  "main": "servidor.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node servidor.js"
+  },
+  "license": "BSD-3-Clause"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "pokedex-api-client-web",
+  "version": "1.0.0",
+  "description": "Client web (HTML, CSS i JS) per a l'API de l'activitat 9",
+  "main": "servidor.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env servidor.js",
+    "dev": "node --env-file-if-exists=.env --watch servidor.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0"
+  }
+}

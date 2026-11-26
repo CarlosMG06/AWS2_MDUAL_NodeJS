@@ -1,0 +1,27 @@
+{
+  "name": "pokedex-api",
+  "version": "1.0.0",
+  "description": "API Express que fa d'intermediària amb PokéAPI · Activitat 9",
+  "main": "servidor.js",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env servidor.js",
+    "dev": "node --env-file-if-exists=.env --watch servidor.js | pino-pretty",
+    "prova-api": "node prova-api.js",
+    "pokeapi-local": "node eines/pokeapi-local.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "pino": "^10.4.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "pino-pretty": "^13.2.0"
+  }
+}

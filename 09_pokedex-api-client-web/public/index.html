@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pokédex · Activitat 9</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/estils.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body>
+    <header class="capcalera">
+      <h1>Pokédex</h1>
+      <nav class="menu" aria-label="Seccions">
+        <button type="button" data-vista="pokedex" class="actiu">Pokédex</button>
+        <button type="button" data-vista="quin-ets">Quin Pokémon ets?</button>
+        <button type="button" data-vista="preferits">Preferits <span id="num-preferits" class="comptador">0</span></button>
+      </nav>
+    </header>
+
+    <div id="avis" class="avis" role="status" hidden></div>
+
+    <main>
+      <!-- 1 · Pokédex: llistat, cerca i filtre per tipus -->
+      <section id="vista-pokedex" class="vista">
+        <form id="form-cerca" class="eines">
+          <input id="cerca" type="search" placeholder="Nom o número: pikachu, 25…" aria-label="Nom o número del Pokémon" />
+          <button type="submit">Cerca</button>
+          <select id="tipus" aria-label="Filtra per tipus">
+            <option value="">Tots els tipus</option>
+          </select>
+        </form>
+        <div id="graella" class="graella" aria-live="polite"></div>
+        <div class="paginacio">
+          <button type="button" id="anterior">← Anterior</button>
+          <span id="pagina"></span>
+          <button type="button" id="seguent">Següent →</button>
+        </div>
+      </section>
+
+      <!-- 2 · Quin Pokémon ets? -->
+      <section id="vista-quin-ets" class="vista" hidden>
+        <h2>Quin Pokémon ets?</h2>
+        <p>Escriu el teu nom i descobreix quin Pokémon et toca. El mateix nom dona sempre el mateix Pokémon.</p>
+        <form id="form-quin-ets" class="eines">
+          <input id="nom-persona" type="text" minlength="2" maxlength="30" required placeholder="El teu nom" aria-label="El teu nom" />
+          <button type="submit">Descobreix-ho</button>
+        </form>
+        <div id="resultat-quin-ets"></div>
+      </section>
+
+      <!-- 3 · Preferits -->
+      <section id="vista-preferits" class="vista" hidden>
+        <h2>Preferits</h2>
+        <p class="nota">Es guarden a la memòria de l'API: si la reinicies, la llista es buida.</p>
+        <div id="llista-preferits" class="graella"></div>
+      </section>
+    </main>
+
+    <dialog id="fitxa">
+      <div id="contingut-fitxa"></div>
+      <form method="dialog"><button class="secundari">Tanca</button></form>
+    </dialog>
+
+    <footer>Dades de PokéAPI, a través de la teva API de l'activitat 9</footer>
+  </body>
+</html>

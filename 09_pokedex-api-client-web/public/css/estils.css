@@ -1,0 +1,165 @@
+:root {
+  --vermell: #d7263d;
+  --vermell-fosc: #a51c2f;
+  --fons: #f3f5f9;
+  --text: #1d2433;
+  --suau: #5a6478;
+  --targeta: #ffffff;
+  --vora: #dde2ec;
+  --radi: 14px;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--fons);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; width: min(1100px, 100% - 2rem); margin: 1.5rem auto; }
+h2 { margin: 0 0 0.5rem; }
+button, input, select { font: inherit; }
+
+/* ---------- Capçalera i menú */
+.capcalera {
+  background: var(--vermell);
+  color: white;
+  padding: 1rem max(1rem, (100% - 1100px) / 2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.capcalera h1 { margin: 0; font-size: 1.8rem; letter-spacing: 0.02em; }
+.menu { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.menu button {
+  background: transparent;
+  color: white;
+  border: 2px solid rgb(255 255 255 / 0.5);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+}
+.menu button.actiu, .menu button:hover { background: white; color: var(--vermell); border-color: white; }
+.comptador {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 0.4em;
+  border-radius: 999px;
+  background: var(--text);
+  color: white;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+/* ---------- Formularis */
+.eines { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0 0 1.25rem; }
+.eines input, .eines select {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--vora);
+  border-radius: 10px;
+  background: white;
+}
+.eines input { flex: 1 1 240px; }
+button {
+  background: var(--vermell);
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+}
+button:hover { background: var(--vermell-fosc); }
+button:disabled { opacity: 0.4; cursor: default; }
+button.secundari { background: #e6e9f0; color: var(--text); }
+button.secundari:hover { background: #d5dae5; }
+
+/* ---------- Graella i targetes */
+.graella { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 1rem; }
+.targeta {
+  background: var(--targeta);
+  border: 1px solid var(--vora);
+  border-radius: var(--radi);
+  padding: 0.9rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.targeta[role="button"] { cursor: pointer; }
+.targeta[role="button"]:hover, .targeta[role="button"]:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgb(29 36 51 / 0.12);
+  outline: none;
+}
+.targeta h3 { margin: 0; font-size: 1.05rem; }
+.targeta button { margin-top: 0.4rem; }
+.sprite { width: 110px; height: 110px; object-fit: contain; background: var(--fons); border-radius: 50%; }
+.pixelada { image-rendering: pixelated; }
+.numero { color: var(--suau); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+
+/* ---------- Tipus */
+.llista-tipus { display: flex; gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+.tipus { padding: 0.15rem 0.6rem; border-radius: 999px; color: white; font-size: 0.78rem; font-weight: 600; background: #888; }
+.tipus-normal { background: #9fa19f; } .tipus-fire { background: #e62829; } .tipus-water { background: #2980ef; }
+.tipus-grass { background: #3fa129; } .tipus-electric { background: #d7a800; } .tipus-ice { background: #3dcef3; }
+.tipus-fighting { background: #ff8000; } .tipus-poison { background: #9141cb; } .tipus-ground { background: #915121; }
+.tipus-flying { background: #81b9ef; } .tipus-psychic { background: #ef4179; } .tipus-bug { background: #91a119; }
+.tipus-rock { background: #afa981; } .tipus-ghost { background: #704170; } .tipus-dragon { background: #5060e1; }
+.tipus-dark { background: #624d4e; } .tipus-steel { background: #60a1b8; } .tipus-fairy { background: #ef70ef; }
+
+/* ---------- Paginació */
+.paginacio { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1.5rem 0; }
+.paginacio span { color: var(--suau); }
+
+/* ---------- Fitxa (diàleg) */
+dialog {
+  border: 0;
+  border-radius: var(--radi);
+  padding: 1.5rem;
+  width: min(640px, 100% - 2rem);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.25);
+}
+dialog::backdrop { background: rgb(29 36 51 / 0.55); }
+dialog form { text-align: right; margin-top: 1rem; }
+.fitxa { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
+.fitxa h2 { margin: 0.1rem 0 0.4rem; }
+.fitxa .llista-tipus { justify-content: flex-start; }
+.imatge-gran { width: 220px; height: 220px; object-fit: contain; background: var(--fons); border-radius: var(--radi); }
+.mides { color: var(--suau); }
+.estadistiques { display: grid; gap: 0.4rem; margin: 0.8rem 0 1.2rem; }
+.estadistica { display: grid; grid-template-columns: 80px 1fr 36px; align-items: center; gap: 0.6rem; font-size: 0.9rem; }
+.estadistica strong { text-align: right; }
+.fons-barra { height: 8px; background: #e6e9f0; border-radius: 999px; overflow: hidden; }
+.barra { display: block; height: 100%; background: var(--vermell); border-radius: 999px; }
+
+/* ---------- Quin Pokémon ets? */
+.resultat { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem; }
+.resultat .targeta { width: 220px; }
+.frase { font-size: 1.5rem; font-weight: 700; text-align: center; margin: 0; }
+.compartir { display: flex; gap: 0.5rem; width: min(560px, 100%); }
+.compartir input { flex: 1; padding: 0.6rem; border: 1px solid var(--vora); border-radius: 10px; color: var(--suau); }
+
+/* ---------- Avisos i missatges */
+.avis {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.8rem 1.3rem;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+  z-index: 10;
+}
+.avis-error { background: var(--vermell-fosc); }
+.avis-ok { background: #2e7d32; }
+.buit, .nota { color: var(--suau); }
+.error { color: var(--vermell-fosc); font-weight: 600; }
+footer { text-align: center; color: var(--suau); font-size: 0.85rem; padding: 1rem; }
+
+@media (max-width: 600px) {
+  .fitxa { grid-template-columns: 1fr; justify-items: center; }
+  .fitxa .llista-tipus { justify-content: center; }
+}
